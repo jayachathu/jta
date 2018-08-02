@@ -476,10 +476,22 @@ public class VDUBuffer {
 
     int bottom = (l > bottomMargin ? height - 1:
             (l < topMargin?topMargin:bottomMargin + 1));
-    System.arraycopy(charArray, screenBase + l + 1,
-                     charArray, screenBase + l, bottom - l - 1);
-    System.arraycopy(charAttributes, screenBase + l + 1,
-                     charAttributes, screenBase + l, bottom - l - 1);
+
+      // When l = 0 copy the whole buffer one line up, deleting first line of the buffer,
+      // instead of the first line visible in the screen,
+      // because we need to output this line to the terminal log.
+      if(l == 0) {
+          System.arraycopy(charArray, l + 1,
+                  charArray, l, screenBase + bottom - l - 1);
+          System.arraycopy(charAttributes, l + 1,
+                  charAttributes, l, screenBase + bottom - l - 1);
+      } else {
+          System.arraycopy(charArray, screenBase + l + 1,
+                  charArray, screenBase + l, bottom - l - 1);
+          System.arraycopy(charAttributes, screenBase + l + 1,
+                  charAttributes, screenBase + l, bottom - l - 1);
+      }
+
     charArray[screenBase + bottom - 1] = new char[width];
     charAttributes[screenBase + bottom - 1] = new int[width];
     markLine(l, bottom - l);
@@ -775,6 +787,19 @@ public class VDUBuffer {
 
   public void setDisplay(VDUDisplay display) {
     this.display = display;
+  }
+
+  public boolean isEmpty() {
+    final int maxRow = this.getBufferSize() <= height ? Math.min(this.getCursorRow() + 1, this.getBufferSize()) : this.getBufferSize();
+    for (int rowNdx = this.getWindowBase(); rowNdx < maxRow; rowNdx++) {
+      char[] row = this.charArray[rowNdx];
+      for (char c : row) {
+        if (c != '\0') {
+            return false;
+        }
+      }
+    }
+    return true;
   }
 
   /**
