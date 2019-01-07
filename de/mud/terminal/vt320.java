@@ -1485,6 +1485,7 @@ public abstract class vt320 extends VDUBuffer implements VDUInput {
               }
               if (C >= columns) {
                 if (wraparound) {
+                  wrapAroundLineNumbers.add(screenBase + R);
                   if (R < bm)
                     R++;
                   else

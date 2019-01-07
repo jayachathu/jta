@@ -25,6 +25,9 @@
 
 package de.mud.terminal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Implementation of a Video Display Unit (VDU) buffer. This class contains
  * all methods to manipulate the buffer that stores characters and their
@@ -45,6 +48,7 @@ public class VDUBuffer {
   public boolean[] update;        /* contains the lines that need update */
   public char[][] charArray;                  /* contains the characters */
   public int[][] charAttributes;             /* contains character attrs */
+  public List<Integer> wrapAroundLineNumbers;  /* record lines numbers of wrapped around lines */
   public int bufSize;
   public int maxBufSize;                                 /* buffer sizes */
   public int screenBase;                      /* the actual screen start */
@@ -702,6 +706,7 @@ public class VDUBuffer {
     char cbuf[][];
     int abuf[][];
     int bsize = bufSize;
+    wrapAroundLineNumbers = new ArrayList<>();
 
     if (w < 1 || h < 1) return;
 
