@@ -475,6 +475,7 @@ public abstract class vt320 extends VDUBuffer implements VDUInput {
   int Sc,Sr,Sa,Stm,Sbm;
   char Sgr,Sgl;
   char Sgx[];
+  char previousChar;
 
   int insertmode = 0;
   int statusmode = 0;
@@ -1341,6 +1342,15 @@ public abstract class vt320 extends VDUBuffer implements VDUInput {
       //return;
     }
 
+    if (previousChar == '\r') {
+      if (c != '\n' && c != '\r') {
+        C = 0;
+        if (R < bm)
+          R++;
+        else
+          insertLine(R, 1, SCROLL_UP);
+      }
+    }
 
     switch (term_state) {
       case TSTATE_DATA:
@@ -2660,6 +2670,7 @@ public abstract class vt320 extends VDUBuffer implements VDUInput {
     if (doshowcursor)
       setCursorPosition(C, R);
     markLine(R, 1);
+    previousChar = c;
   }
 
   /* hard reset the terminal */
