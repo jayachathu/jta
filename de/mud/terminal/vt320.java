@@ -1026,7 +1026,9 @@ public abstract class vt320 extends VDUBuffer implements VDUInput {
   }
 
   private void handle_osc(String osc) {
-    System.out.println("OSC: " + osc);
+    if (debug > 0) {
+      System.out.println("OSC: " + osc);
+    }
   }
 
   private final static char unimap[] = {
@@ -1342,14 +1344,12 @@ public abstract class vt320 extends VDUBuffer implements VDUInput {
       //return;
     }
 
-    if (previousChar == '\r') {
-      if (c != '\n' && c != '\r') {
-        C = 0;
-        if (R < bm)
-          R++;
-        else
-          insertLine(R, 1, SCROLL_UP);
-      }
+    if (previousChar == '\r' && c != '\n' && c != '\r') {
+      C = 0;
+      if (R < bm)
+        R++;
+      else
+        insertLine(R, 1, SCROLL_UP);
     }
 
     switch (term_state) {
