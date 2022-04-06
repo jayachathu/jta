@@ -2387,12 +2387,6 @@ public abstract class vt320 extends VDUBuffer implements VDUInput {
             if (debug > 1) System.out.println("ESC [ " + DCEvars[0] + " G");
             break;
           case 'H':  /* CUP  / cursor position */
-            /* gets 2 arguments */
-            _SetCursor(DCEvars[0] - 1, DCEvars[1] - 1);
-            if (debug > 2) {
-              System.out.println("ESC [ " + DCEvars[0] + ";" + DCEvars[1] + " H, moveoutsidemargins " + moveoutsidemargins);
-              System.out.println("	-> R now " + R + ", C now " + C);
-            }
             break;
           case 'f':  /* move cursor 2 */
             /* gets 2 arguments */
