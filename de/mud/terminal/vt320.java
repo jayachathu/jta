@@ -81,7 +81,7 @@ public abstract class vt320 extends VDUBuffer implements VDUInput {
   protected void sendTelnetCommand(byte cmd) {
   }
 
-  /** 
+  /**
    * Sent the changed window size from the terminal to all listeners.
    */
   protected void setWindowSize(int c, int r) {
@@ -2388,7 +2388,10 @@ public abstract class vt320 extends VDUBuffer implements VDUInput {
             break;
           case 'H':  /* CUP  / cursor position */
             /* gets 2 arguments */
-            _SetCursor(DCEvars[0] - 1, DCEvars[1] - 1);
+              if (DCEvars[0] > 0){
+                _SetCursor(DCEvars[0] - 1, DCEvars[1] - 1);
+              }
+
             if (debug > 2) {
               System.out.println("ESC [ " + DCEvars[0] + ";" + DCEvars[1] + " H, moveoutsidemargins " + moveoutsidemargins);
               System.out.println("	-> R now " + R + ", C now " + C);
